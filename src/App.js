@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Library from './components/library/Library';
+import PDFReader from './components/reader/PDFReader';
 
 function App() {
+  const [currentView, setCurrentView] = useState('library');
+  const [selectedBook, setSelectedBook] = useState(null);
+
+  const openBook = (book) => {
+    setSelectedBook(book);
+    setCurrentView('reader');
+  };
+
+  const closeReader = () => {
+    setCurrentView('library');
+    setSelectedBook(null);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {currentView === 'library' && (
+        <Library onBookSelect={openBook} />
+      )}
+      {currentView === 'reader' && (
+        <PDFReader 
+          book={selectedBook} 
+          onClose={closeReader} 
+        />
+      )}
     </div>
   );
 }
